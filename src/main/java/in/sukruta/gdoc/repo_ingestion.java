@@ -15,6 +15,7 @@ public class repo_ingestion
 {
     static String repo_name;
     public static String repo_url; //the main & only input
+    public static Path local_temp_path;
     public static String accept_input()
     {
         Scanner sc = new Scanner(System.in);
@@ -76,7 +77,7 @@ public class repo_ingestion
             Files.createDirectories(app_temp_dir);
         }
 
-        Path local_temp_path = app_temp_dir.resolve(repo_name); //build full local path
+        local_temp_path = app_temp_dir.resolve(repo_name); //build full local path
 
         if(Files.isDirectory(local_temp_path))
         {
@@ -92,6 +93,11 @@ public class repo_ingestion
             // }
         }
         Files.createDirectories(local_temp_path);
+
+        System.out.println("Base temp dir: " + base_temp_dir);
+System.out.println("App temp dir: " + app_temp_dir.toAbsolutePath());
+System.out.println("Local temp dir: " + local_temp_path.toAbsolutePath());
+
         return local_temp_path.toString();
     }
 

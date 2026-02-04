@@ -51,6 +51,23 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.2.5</version>
+</plugin>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>3.1.0</version>
+
+    <configuration>
+        <mainClass>in.sukruta.gdoc.clone_repo</mainClass>
+    </configuration>
+</plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -73,11 +90,10 @@
                                     </filterchain>
                                 </loadresource>
                                 <echo file="${project.basedir}/src/main/generated-sources/${packagePath}/Version.java">
-package in.sukruta.gdoc;
+                                        package in.sukruta.gdoc;
 public class Version {
    public static final String VERSION = "${project.version}";
-   public static final String API_VERSION = "${doesthiscompile.version}";
-}
+   public static final String API_VERSION = "${doesthiscompile.version}";}
                                 </echo>
                             </target>
                         </configuration>
