@@ -16,6 +16,8 @@ public class repo_ingestion
     static String repo_name;
     public static String repo_url; //the main & only input
     public static Path local_temp_path;
+
+
     public static String accept_input()
     {
         Scanner sc = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class repo_ingestion
             System.out.println("Enter the repo URL");
             repo_url = sc.nextLine();
             check = validate(repo_url); //basic validation of url till correct input not provided
-            System.out.println(repo_url + " " + check + "\n");
+            //System.out.println(repo_url + " " + check + "\n"); //debug log
             if(check != false)
             {
             sc.close();
@@ -34,6 +36,7 @@ public class repo_ingestion
             System.out.println("Error! Please correct repo URL");
         }
         while(check != true);
+        System.out.println("URL Recieved"); //logs for debugging
         return repo_url;
     }
 
@@ -95,8 +98,8 @@ public class repo_ingestion
         Files.createDirectories(local_temp_path);
 
         System.out.println("Base temp dir: " + base_temp_dir);
-System.out.println("App temp dir: " + app_temp_dir.toAbsolutePath());
-System.out.println("Local temp dir: " + local_temp_path.toAbsolutePath());
+        System.out.println("App temp dir: " + app_temp_dir.toAbsolutePath());
+        System.out.println("Local temp dir: " + local_temp_path.toAbsolutePath());
 
         return local_temp_path.toString();
     }
