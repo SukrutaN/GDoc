@@ -10,6 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
+
+
 
 public class repo_ingestion
 {
@@ -59,50 +63,48 @@ public class repo_ingestion
         return m.matches();
     }
 
-    private static void deleteDirectory(File file)
+    private static void deleteDirectory(File file) throws IOException // Success
     {
-        for(File subfile: file.listFiles())
-            {
-                if(subfile.isDirectory())
-                    deleteDirectory(subfile);
+        try
+        {
+            FileUtils.cleanDirectory(file);
+            FileUtils.deleteDirectory(file);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }    
 
-                subfile.delete();
-            }
+public static String create_temp_folder() throws IOException// InterruptedException
+{
+    String base_temp_dir = System.getProperty("java.io.tmpdir");
+    Path app_temp_dir = Paths.get(base_temp_dir, "repo");
+
+    if(!Files.isDirectory(app_temp_dir))
+    {
+        Files.createDirectories(app_temp_dir);
     }
 
-    public static String create_temp_folder() throws IOException//need to change the File, Files, FileUtils part
+    local_temp_path = app_temp_dir.resolve(repo_name);
+
+    if(Files.exists(local_temp_path))
     {
-        String base_temp_dir = System.getProperty("java.io.tmpdir"); //get system temp dir
-        Path app_temp_dir = Paths.get(base_temp_dir, "repo"); //create app-specific base dir inside temp
-
-        if(!Files.isDirectory(app_temp_dir)) //prepare base dir, if does not exist
-        {
-            Files.createDirectories(app_temp_dir);
-        }
-
-        local_temp_path = app_temp_dir.resolve(repo_name); //build full local path
-
-        if(Files.isDirectory(local_temp_path))
-        {
-            File dir = local_temp_path.toFile();
-            //try 
-            {
-                deleteDirectory(dir);
-            }          
-            // catch(IOException e)
-            // {
-            //     System.err.println("Failed to delete");
-            //     throw e;
-            // }
-        }
-        Files.createDirectories(local_temp_path);
-
-        System.out.println("Base temp dir: " + base_temp_dir);
-        System.out.println("App temp dir: " + app_temp_dir.toAbsolutePath());
-        System.out.println("Local temp dir: " + local_temp_path.toAbsolutePath());
-
-        return local_temp_path.toString();
+        System.out.println("Deleting existing directory: " + local_temp_path);
+        
+        File dir = local_temp_path.toFile();
+        deleteDirectory(dir);
+        System.out.println("Directory deleted successfully");
     }
+    
+    Files.createDirectories(local_temp_path);
+
+    System.out.println("Base temp dir: " + base_temp_dir);
+    System.out.println("App temp dir: " + app_temp_dir.toAbsolutePath());
+    System.out.println("Local temp dir: " + local_temp_path.toAbsolutePath());
+
+    return local_temp_path.toString();
+}
 
 
 public static void main(String[] args) throws IOException
